@@ -13,14 +13,14 @@ public class Championship {
 
     private ArrayList<Driver> drivers;
     private ArrayList<Venue> venues;
-    private int num_races;
+    private int numRaces;
 
     final int MINOR_MECHANICAL_FAULT = 5;
     final int MAJOR_MECHANICAL_FAULT = 3;
     final int UNRECOVERABLE_MECHANICAL_FAULT = 1;
 
     Championship(String drivers_txt, String venues_txt, int races) throws IOException {
-        this.num_races = races;
+        this.numRaces = races;
         drivers = new ArrayList<>();
         venues = new ArrayList<>();
 
@@ -43,38 +43,70 @@ public class Championship {
     }
 
     public void setRaces(int races) {
-        this.num_races = races;
+        this.numRaces = races;
     }
 
     public int getRaces() {
-        return num_races;
+        return numRaces;
+    }
+
+    public ArrayList<Driver> getDrivers() {
+        return drivers;
+    }
+
+    public ArrayList<Venue> getVenues() {
+        return venues;
+    }
+
+    String getVenuesName(int i) {
+        Venue vn;
+        vn = venues.get(i);
+        return vn.getVenueName();
     }
 
     void prepareForTheRace() {
-        
+
     }
-    
+
     void driveAverageLapTime() {
-        
+
     }
 
     void applySpecialSkills() {
-        
+
     }
-    
+
     void checkMechanicalProblem() {
-        
+
     }
-    
+
     void printLeader(int lap) {
-        
+
     }
-    
+
     void printWinnersAfterRace(String venueName) {
-        
+
     }
-    
+
     void printChampion(int numOfRaces) {
-        
+
+    }
+
+    int getNumberOfVenues() {
+        Venue vn;
+        vn = venues.get(0);
+        return vn.getNumberOfVenues();
+    }
+
+    boolean isChosenRace(int i) {
+        Venue vn;
+        vn = venues.get(i);
+        return vn.getChosenRace();
+    }
+
+    void setChosenRace(int chosenRace) {
+        Venue vn;
+        vn = venues.get(chosenRace);
+        vn.setChosenRace(true);
     }
 }

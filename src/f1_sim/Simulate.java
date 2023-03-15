@@ -37,18 +37,36 @@ public class Simulate {
             venues_file = new File(venues_txt);
         } while (!venues_file.exists());
 
-        int num_races = 0;
+        int numRaces = 0;
         String readString;
         do {
             System.out.println("How many races will be run in this championship? "
                     + "(3-5 is possible)");
             readString = sc.nextLine();
-            num_races = Integer.parseInt(readString);
-        } while (num_races > 5 || num_races < 3);
+            numRaces = Integer.parseInt(readString);
+        } while (numRaces > 5 || numRaces < 3);
 
-        Championship chmp = new Championship(drivers_txt, venues_txt, num_races);
+        Championship chmp = new Championship(drivers_txt, venues_txt, numRaces);
 
-        System.out.println("-------------------------------------");
+        System.out.println("---------------------------------------");
+        int chosenRace = 0;
+        for (int i = 1; i <= numRaces; i++) {
+            System.out.println("* RACE " + i + " *");
+            System.out.println("Choose venue for race number " + i);
+            for (int j = 1; j <= chmp.getNumberOfVenues(); j++) {
+                if (!chmp.isChosenRace(j - 1)) {
+                    System.out.println(j + ") " + chmp.getVenuesName(j - 1));
+                }
+            }
+            do {
+                readString = sc.nextLine();
+                chosenRace = Integer.parseInt(readString);
+            } while (chosenRace > chmp.getNumberOfVenues() || chosenRace < 1 || chmp.isChosenRace(chosenRace - 1));
 
+            chmp.setChosenRace(chosenRace - 1);
+        }
+        
+        System.out.println("---------------------------------------");
+        System.out.println("RACING CHAMPIONSHIP BEGINS!");
     }
 }
