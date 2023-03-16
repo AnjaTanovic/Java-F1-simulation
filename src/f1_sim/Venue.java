@@ -10,7 +10,6 @@ public class Venue {
     private int numberOfLaps;
     private int averageLapTime;
     private double chanceOfRain;
-    static private int numberOfVenues;
     private boolean chosenRace;
 
     public Venue() {
@@ -18,7 +17,6 @@ public class Venue {
         this.numberOfLaps = 3;
         this.averageLapTime = 70;
         this.chanceOfRain = 0;
-        numberOfVenues++;
         chosenRace = false;
     }
 
@@ -27,7 +25,6 @@ public class Venue {
         this.numberOfLaps = numberOfLaps;
         this.averageLapTime = averageLapTime;
         this.chanceOfRain = chanceOfRain;
-        numberOfVenues++;
         chosenRace = false;
     }
 
@@ -47,20 +44,11 @@ public class Venue {
         return numberOfLaps;
     }
     
-    public int getNumberOfVenues() {
-        return numberOfVenues;
-    }
-    
     public boolean getChosenRace() {
         return chosenRace;
     }
 
     public void setChosenRace(boolean chosenRace) {
         this.chosenRace = chosenRace;
-    }
-    
-    @Override
-    protected void finalize() {
-        numberOfVenues--;
     }
 }

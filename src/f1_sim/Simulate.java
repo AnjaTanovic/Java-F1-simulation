@@ -50,6 +50,7 @@ public class Simulate {
 
         System.out.println("---------------------------------------");
         int chosenRace = 0;
+        int[] races = new int[numRaces]; //array of chosen races, example: 2 5 3 are chosen
         for (int i = 1; i <= numRaces; i++) {
             System.out.println("* RACE " + i + " *");
             System.out.println("Choose venue for race number " + i);
@@ -64,9 +65,37 @@ public class Simulate {
             } while (chosenRace > chmp.getNumberOfVenues() || chosenRace < 1 || chmp.isChosenRace(chosenRace - 1));
 
             chmp.setChosenRace(chosenRace - 1);
+            races[i - 1] = chosenRace - 1;
         }
-        
+
         System.out.println("---------------------------------------");
-        System.out.println("RACING CHAMPIONSHIP BEGINS!");
+        System.out.println("RACING CHAMPIONSHIP IS ABOUT TO BEGIN!");
+        System.out.println("---------------------------------------");
+
+        for (int i = 0; i < numRaces; i++) {
+            System.out.println("* RACE NUMBER " + (i + 1) + " IS STARTING *");
+            System.out.println("---------------------------------------");
+            for (int j = 0; j < chmp.getNumberOfLaps(i); j++) {
+                //prepare !!
+                System.out.println("Drivers are ready to start lap number " + (j + 1)
+                        + " on vanue " + chmp.getVenuesName(races[i]) + ".");
+                chmp.driveAverageLapTime(races[i]);
+                chmp.applySpecialSkills();
+
+                System.out.println("Lap number " + (j + 1) + " is finished.");
+                chmp.checkMechanicalProblem();
+                //chmp.updatePoints();
+                //chmp.printLeader();
+
+                System.out.println("Insert enter to continue.");
+                readString = sc.nextLine();
+            }
+            //chmp.printWinnersAfterRace();
+            System.out.println("---------------------------------------");
+        }
+        System.out.println("CHAMPIONSHIP IS FINISHED.");
+        System.out.println("---------------------------------------");
+
+        //chmp.printChampion();
     }
 }

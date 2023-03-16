@@ -78,7 +78,7 @@ public class Driver {
     public int getAccumulatedPoints() {
         return accumulatedPoints;
     }
-
+    
     public void useSpecialSkill(RNG rng) {
         
     }

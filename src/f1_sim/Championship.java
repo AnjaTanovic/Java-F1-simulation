@@ -14,6 +14,7 @@ public class Championship {
     private ArrayList<Driver> drivers;
     private ArrayList<Venue> venues;
     private int numRaces;
+    private int lapCounter;
 
     final int MINOR_MECHANICAL_FAULT = 5;
     final int MAJOR_MECHANICAL_FAULT = 3;
@@ -21,6 +22,7 @@ public class Championship {
 
     Championship(String drivers_txt, String venues_txt, int races) throws IOException {
         this.numRaces = races;
+        this.lapCounter = 0;
         drivers = new ArrayList<>();
         venues = new ArrayList<>();
 
@@ -68,16 +70,71 @@ public class Championship {
 
     }
 
-    void driveAverageLapTime() {
-
+    void driveAverageLapTime(int race) {
+        Driver drv;
+        Venue vn = venues.get(race);
+        int averageLapTime = vn.getAverageLapTime();
+        for (int i = 0; i < drivers.size(); i++) {
+            drv = drivers.get(i);
+            if (drv.isEligibleToRace()) {
+                drv.setAccumulatedTime(averageLapTime);
+            } else {
+                drv.setAccumulatedTime(0);
+            }
+        }
     }
 
     void applySpecialSkills() {
-
+        Driver drv;
+        int reduced_time = 0;
+        RNG rnd;
+        lapCounter++;
+        for (int i = 0; i < drivers.size(); i++) {
+            drv = drivers.get(i);
+            if (drv.isEligibleToRace()) {
+                if (drv.getSpecialSkill().equals("Overtaking")) {
+                    if (lapCounter % 3 == 0) {
+                        rnd = new RNG(10, 20 + 1);
+                        reduced_time = rnd.getRandomValue();
+                    }
+                } else if (drv.getSpecialSkill().equals("Cornering")
+                        || drv.getSpecialSkill().equals("Braking")) {
+                    rnd = new RNG(1, 8 + 1);
+                    reduced_time = rnd.getRandomValue();
+                }
+            }
+            drv.setAccumulatedTime(drv.getAccumulatedTime() - reduced_time);
+        }
     }
 
     void checkMechanicalProblem() {
-
+        System.out.println("Checking for mechanical problems.");
+        Driver drv;
+        RNG rnd;
+        //1, 2-4, 5-9 numbers are problems
+        int problemProbability = 0;
+        for (int i = 0; i < drivers.size(); i++) {
+            drv = drivers.get(i);
+            if (drv.isEligibleToRace()) {
+            rnd = new RNG(1, 100 + 1); //100 possible numbers -> probability
+            problemProbability = rnd.getRandomValue();
+                if (problemProbability == UNRECOVERABLE_MECHANICAL_FAULT) {
+                    System.out.println("Driver " + drv.getName() + " has unrecoverable "
+                            + "mechanical fault. He will no longer compete in this race.");
+                    drv.setEligibleToRace(false);
+                }
+                else if ((problemProbability > UNRECOVERABLE_MECHANICAL_FAULT) && 
+                        (problemProbability <= (UNRECOVERABLE_MECHANICAL_FAULT + MAJOR_MECHANICAL_FAULT))) {
+                    System.out.println("Driver " + drv.getName() + " had major mechanical fault.");
+                    drv.setAccumulatedTime(drv.getAccumulatedTime() + 120);
+                }
+                else if ((problemProbability > (UNRECOVERABLE_MECHANICAL_FAULT + MAJOR_MECHANICAL_FAULT)) && 
+                        (problemProbability <= (UNRECOVERABLE_MECHANICAL_FAULT + MAJOR_MECHANICAL_FAULT + MINOR_MECHANICAL_FAULT))) {
+                    System.out.println("Driver " + drv.getName() + " had minor mechanical fault.");
+                    drv.setAccumulatedTime(drv.getAccumulatedTime() + 20);
+                }
+            }
+        }
     }
 
     void printLeader(int lap) {
@@ -93,9 +150,7 @@ public class Championship {
     }
 
     int getNumberOfVenues() {
-        Venue vn;
-        vn = venues.get(0);
-        return vn.getNumberOfVenues();
+        return venues.size();
     }
 
     boolean isChosenRace(int i) {
@@ -108,5 +163,11 @@ public class Championship {
         Venue vn;
         vn = venues.get(chosenRace);
         vn.setChosenRace(true);
+    }
+
+    int getNumberOfLaps(int venue) {
+        Venue vn;
+        vn = venues.get(venue);
+        return vn.getNumberOfLaps();
     }
 }
