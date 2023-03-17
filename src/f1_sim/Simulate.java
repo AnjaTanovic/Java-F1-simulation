@@ -73,10 +73,13 @@ public class Simulate {
         System.out.println("---------------------------------------");
 
         for (int i = 0; i < numRaces; i++) {
+            System.out.println("Preparing for race number " + (i + 1) + ".");
             System.out.println("* RACE NUMBER " + (i + 1) + " IS STARTING *");
             System.out.println("---------------------------------------");
+            if (i > 0) {
+                chmp.prepareForTheRace();
+            }
             for (int j = 0; j < chmp.getNumberOfLaps(i); j++) {
-                //prepare !!
                 System.out.println("Drivers are ready to start lap number " + (j + 1)
                         + " on vanue " + chmp.getVenuesName(races[i]) + ".");
                 chmp.driveAverageLapTime(races[i]);
@@ -87,15 +90,24 @@ public class Simulate {
                 //chmp.updatePoints();
                 //chmp.printLeader();
 
+                System.out.println("Insert enter to see results in lap " + (j + 1) + ".");
+                readString = sc.nextLine();
+                chmp.sortDriversByTime();
+
                 System.out.println("Insert enter to continue.");
                 readString = sc.nextLine();
             }
-            //chmp.printWinnersAfterRace();
+
+            chmp.printWinnersAfterRace(chmp.getVenuesName(races[i]));
             System.out.println("---------------------------------------");
         }
         System.out.println("CHAMPIONSHIP IS FINISHED.");
         System.out.println("---------------------------------------");
+        chmp.sortDriversByPoints();
+        System.out.println("\nFinal result:");
+        System.out.println("***************************************");
+        chmp.printChampion();
+        System.out.println("***************************************");
 
-        //chmp.printChampion();
     }
 }

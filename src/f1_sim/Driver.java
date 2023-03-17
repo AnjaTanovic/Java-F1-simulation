@@ -4,7 +4,7 @@ package f1_sim;
  *
  * @author Anja Tanovic
  */
-public class Driver {
+public class Driver implements Comparable<Driver>{
 
     private String name;
     private int ranking;
@@ -81,5 +81,15 @@ public class Driver {
     
     public void useSpecialSkill(RNG rng) {
         
+    }
+
+    @Override
+    public int compareTo(Driver o) {
+        int greater = 0;
+        if (this.accumulatedTime > o.getAccumulatedTime())
+            greater = 1;
+        else if (this.accumulatedTime < o.getAccumulatedTime())
+            greater = -1;
+        return greater;
     }
 }

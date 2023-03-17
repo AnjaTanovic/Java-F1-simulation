@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  *
@@ -67,7 +68,12 @@ public class Championship {
     }
 
     void prepareForTheRace() {
-
+        Driver drv;
+        for (int i = 0; i < drivers.size(); i++) {
+            drv = drivers.get(i);
+            drv.setAccumulatedTime(0);
+            drv.setEligibleToRace(true);
+        }
     }
 
     void driveAverageLapTime(int race) {
@@ -77,9 +83,7 @@ public class Championship {
         for (int i = 0; i < drivers.size(); i++) {
             drv = drivers.get(i);
             if (drv.isEligibleToRace()) {
-                drv.setAccumulatedTime(averageLapTime);
-            } else {
-                drv.setAccumulatedTime(0);
+                drv.setAccumulatedTime(drv.getAccumulatedTime() + averageLapTime);
             }
         }
     }
@@ -116,20 +120,18 @@ public class Championship {
         for (int i = 0; i < drivers.size(); i++) {
             drv = drivers.get(i);
             if (drv.isEligibleToRace()) {
-            rnd = new RNG(1, 100 + 1); //100 possible numbers -> probability
-            problemProbability = rnd.getRandomValue();
+                rnd = new RNG(1, 100 + 1); //100 possible numbers -> probability
+                problemProbability = rnd.getRandomValue();
                 if (problemProbability == UNRECOVERABLE_MECHANICAL_FAULT) {
                     System.out.println("Driver " + drv.getName() + " has unrecoverable "
                             + "mechanical fault. He will no longer compete in this race.");
                     drv.setEligibleToRace(false);
-                }
-                else if ((problemProbability > UNRECOVERABLE_MECHANICAL_FAULT) && 
-                        (problemProbability <= (UNRECOVERABLE_MECHANICAL_FAULT + MAJOR_MECHANICAL_FAULT))) {
+                } else if ((problemProbability > UNRECOVERABLE_MECHANICAL_FAULT)
+                        && (problemProbability <= (UNRECOVERABLE_MECHANICAL_FAULT + MAJOR_MECHANICAL_FAULT))) {
                     System.out.println("Driver " + drv.getName() + " had major mechanical fault.");
                     drv.setAccumulatedTime(drv.getAccumulatedTime() + 120);
-                }
-                else if ((problemProbability > (UNRECOVERABLE_MECHANICAL_FAULT + MAJOR_MECHANICAL_FAULT)) && 
-                        (problemProbability <= (UNRECOVERABLE_MECHANICAL_FAULT + MAJOR_MECHANICAL_FAULT + MINOR_MECHANICAL_FAULT))) {
+                } else if ((problemProbability > (UNRECOVERABLE_MECHANICAL_FAULT + MAJOR_MECHANICAL_FAULT))
+                        && (problemProbability <= (UNRECOVERABLE_MECHANICAL_FAULT + MAJOR_MECHANICAL_FAULT + MINOR_MECHANICAL_FAULT))) {
                     System.out.println("Driver " + drv.getName() + " had minor mechanical fault.");
                     drv.setAccumulatedTime(drv.getAccumulatedTime() + 20);
                 }
@@ -142,11 +144,14 @@ public class Championship {
     }
 
     void printWinnersAfterRace(String venueName) {
-
+        System.out.println("After race on " + venueName + " winners are:");
+        for (int i = 0; i < 4; i++) {
+            System.out.println((i+1) + ") " + drivers.get(i).getName());
+        }
     }
 
-    void printChampion(int numOfRaces) {
-
+    void printChampion() {
+        System.out.println("CHAMPION IS " + drivers.get(0).getName().toUpperCase() + "!!!");
     }
 
     int getNumberOfVenues() {
@@ -169,5 +174,48 @@ public class Championship {
         Venue vn;
         vn = venues.get(venue);
         return vn.getNumberOfLaps();
+    }
+
+    void sortDriversByTime() {
+        Collections.sort(drivers);
+
+        Driver drv;
+        for (int i = 0; i < 4; i++) {
+            drv = drivers.get(i);
+            drv.setRanking(i + 1);
+            switch (i + 1) {
+                case 1 ->
+                    drv.setAccumulatedPoints(drv.getAccumulatedPoints() + 8);
+                case 2 ->
+                    drv.setAccumulatedPoints(drv.getAccumulatedPoints() + 5);
+                case 3 ->
+                    drv.setAccumulatedPoints(drv.getAccumulatedPoints() + 3);
+                default ->
+                    drv.setAccumulatedPoints(drv.getAccumulatedPoints() + 1);
+            }
+        }
+        for (int i = 4; i < drivers.size(); i++) {
+            drv = drivers.get(i);
+            drv.setRanking(5);
+        }
+
+        System.out.println("Sorted drivers:");
+        for (Driver driver : drivers) {
+            System.out.println("Driver " + driver.getName() + ", "
+                    + driver.getAccumulatedTime() + " seconds.");
+        }
+    }
+
+    void sortDriversByPoints() {
+        for (Driver driver : drivers) {
+            driver.setAccumulatedTime(driver.getAccumulatedPoints());
+        }
+        Collections.sort(drivers);
+        Collections.reverse(drivers);
+        System.out.println("Sorted drivers:");
+        for (Driver driver : drivers) {
+            System.out.println("Driver " + driver.getName() + ", "
+                    + driver.getAccumulatedPoints() + " points.");
+        }
     }
 }
