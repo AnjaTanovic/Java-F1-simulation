@@ -12,6 +12,7 @@ public class Driver implements Comparable<Driver>{
     private boolean eligibleToRace;
     private int accumulatedTime;
     private int accumulatedPoints;
+    private boolean wetWeatherPneumatics;
 
     public Driver() {
         this.name = "Driver";
@@ -20,6 +21,7 @@ public class Driver implements Comparable<Driver>{
         this.eligibleToRace = true;
         this.accumulatedTime = 0;
         this.accumulatedPoints = 0;
+        this.wetWeatherPneumatics = false;
     }
 
     public Driver(String name, int ranking, String specialSkill) {
@@ -37,6 +39,7 @@ public class Driver implements Comparable<Driver>{
         this.eligibleToRace = true;
         this.accumulatedTime = 0;
         this.accumulatedPoints = 0;
+        this.wetWeatherPneumatics = false;
     }
 
     public void setRanking(int ranking) {
@@ -77,6 +80,14 @@ public class Driver implements Comparable<Driver>{
 
     public int getAccumulatedPoints() {
         return accumulatedPoints;
+    }
+    
+    public boolean isWetWeatherPneumatics() {
+        return wetWeatherPneumatics;
+    }
+
+    public void setWetWeatherPneumatics(boolean wetWeatherPneumatics) {
+        this.wetWeatherPneumatics = wetWeatherPneumatics;
     }
     
     public void useSpecialSkill(RNG rng) {

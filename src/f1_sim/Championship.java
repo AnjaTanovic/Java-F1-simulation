@@ -73,6 +73,7 @@ public class Championship {
             drv = drivers.get(i);
             drv.setAccumulatedTime(0);
             drv.setEligibleToRace(true);
+            drv.setWetWeatherPneumatics(false);
         }
     }
 
@@ -140,13 +141,15 @@ public class Championship {
     }
 
     void printLeader(int lap) {
-
+        Driver drv;
+        drv = drivers.get(0);
+        System.out.println("* Leader in the lap number " + (lap+1) + " is " + drv.getName() + ".");
     }
 
     void printWinnersAfterRace(String venueName) {
-        System.out.println("After race on " + venueName + " winners are:");
+        System.out.println("* After race on " + venueName + " winners are:");
         for (int i = 0; i < 4; i++) {
-            System.out.println((i+1) + ") " + drivers.get(i).getName());
+            System.out.println((i + 1) + ") " + drivers.get(i).getName());
         }
     }
 
@@ -216,6 +219,35 @@ public class Championship {
         for (Driver driver : drivers) {
             System.out.println("Driver " + driver.getName() + ", "
                     + driver.getAccumulatedPoints() + " points.");
+        }
+    }
+
+    void pneumaticsDecision() {
+        RNG rnd;
+        rnd = new RNG(1, 100 + 1);
+        for (Driver driver : drivers) {
+            if (rnd.getRandomValue() < 51) {
+                driver.setWetWeatherPneumatics(true);
+                driver.setAccumulatedTime(driver.getAccumulatedTime() + 10);
+                System.out.println("Driver " + driver.getName() + " decided to use "
+                        + "pneumatics for wet weather.");
+            }
+        }
+    }
+
+    void checkRainOccurence(int race) {
+        Venue vn;
+        vn = venues.get(race);
+        double chanceOfRain = vn.getChanceOfRain();
+        chanceOfRain = chanceOfRain * 100;
+        RNG rnd = new RNG(1, 100 + 1);
+        if (rnd.getRandomValue() <= chanceOfRain) {
+            System.out.println("Rain occurred on venue " + vn.getVenueName() + ".");
+            for (Driver driver : drivers) {
+                if (!driver.isWetWeatherPneumatics()) {
+                    driver.setAccumulatedTime(driver.getAccumulatedTime() + 5);
+                }
+            }
         }
     }
 }

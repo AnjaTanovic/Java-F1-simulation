@@ -29,13 +29,13 @@ public class Simulate {
             System.out.print("Insert the absolute path to the driver text document: ");
             drivers_txt = sc.nextLine();
             drivers_file = new File(drivers_txt);
-        } while (!drivers_file.exists());
+        } while (!drivers_file.exists() || !drivers_file.isFile());
 
         do {
             System.out.print("Insert the absolute path to the venue text document: ");
             venues_txt = sc.nextLine();
             venues_file = new File(venues_txt);
-        } while (!venues_file.exists());
+        } while (!venues_file.exists() || !venues_file.isFile());
 
         int numRaces = 0;
         String readString;
@@ -61,7 +61,12 @@ public class Simulate {
             }
             do {
                 readString = sc.nextLine();
-                chosenRace = Integer.parseInt(readString);
+                try {
+                    chosenRace = Integer.parseInt(readString);
+                } catch (NumberFormatException nfe) {
+                    System.out.println("NumberFormat Exception: invalid input. "
+                            + "Number of venue should be inserted.");
+                }
             } while (chosenRace > chmp.getNumberOfVenues() || chosenRace < 1 || chmp.isChosenRace(chosenRace - 1));
 
             chmp.setChosenRace(chosenRace - 1);
@@ -82,19 +87,24 @@ public class Simulate {
             for (int j = 0; j < chmp.getNumberOfLaps(i); j++) {
                 System.out.println("Drivers are ready to start lap number " + (j + 1)
                         + " on vanue " + chmp.getVenuesName(races[i]) + ".");
+                if (j == 1) {
+                    chmp.pneumaticsDecision();
+                }
+
                 chmp.driveAverageLapTime(races[i]);
                 chmp.applySpecialSkills();
+                chmp.checkRainOccurence(races[i]);
 
                 System.out.println("Lap number " + (j + 1) + " is finished.");
                 chmp.checkMechanicalProblem();
-                //chmp.updatePoints();
-                //chmp.printLeader();
 
-                System.out.println("Insert enter to see results in lap " + (j + 1) + ".");
+                System.out.println("Press enter to see results in lap " + (j + 1) + ".");
                 readString = sc.nextLine();
                 chmp.sortDriversByTime();
+                
+                chmp.printLeader(j);
 
-                System.out.println("Insert enter to continue.");
+                System.out.println("Press enter to continue.");
                 readString = sc.nextLine();
             }
 
