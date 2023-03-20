@@ -50,5 +50,6 @@ public class Venue {
 
     public void setChosenRace(boolean chosenRace) {
         this.chosenRace = chosenRace;
+        System.out.println("Venue " + this.venueName + " is choosen.");
     }
 }

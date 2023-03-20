@@ -68,12 +68,24 @@ public class Championship {
     }
 
     void prepareForTheRace() {
+        System.out.println("Preparing for race...");
         Driver drv;
         for (int i = 0; i < drivers.size(); i++) {
             drv = drivers.get(i);
-            drv.setAccumulatedTime(0);
             drv.setEligibleToRace(true);
             drv.setWetWeatherPneumatics(false);
+            
+            if (drv.getRanking() == 1) {
+                drv.setAccumulatedTime(0);
+            } else if (drv.getRanking() == 2) {
+                drv.setAccumulatedTime(3);
+            } else if (drv.getRanking() == 3) {
+                drv.setAccumulatedTime(5);
+            } else if (drv.getRanking() == 4) {
+                drv.setAccumulatedTime(7);
+            } else {
+                drv.setAccumulatedTime(10);
+            }
         }
     }
 
@@ -90,6 +102,7 @@ public class Championship {
     }
 
     void applySpecialSkills() {
+        System.out.println("Applying special skills...");
         Driver drv;
         int reduced_time = 0;
         RNG rnd;
@@ -101,11 +114,16 @@ public class Championship {
                     if (lapCounter % 3 == 0) {
                         rnd = new RNG(10, 20 + 1);
                         reduced_time = rnd.getRandomValue();
+                        System.out.println("Driver " + drv.getName() + " reduced his lap time"
+                                + " for " + reduced_time + " seconds due to overtaking skill.");
                     }
                 } else if (drv.getSpecialSkill().equals("Cornering")
                         || drv.getSpecialSkill().equals("Braking")) {
                     rnd = new RNG(1, 8 + 1);
                     reduced_time = rnd.getRandomValue();
+                    System.out.println("Driver " + drv.getName() + " reduced his lap time"
+                            + " for " + reduced_time + " seconds due to "
+                            + drv.getSpecialSkill().toLowerCase() + " skill.");
                 }
             }
             drv.setAccumulatedTime(drv.getAccumulatedTime() - reduced_time);
@@ -113,7 +131,7 @@ public class Championship {
     }
 
     void checkMechanicalProblem() {
-        System.out.println("Checking for mechanical problems.");
+        System.out.println("Checking for mechanical problems...");
         Driver drv;
         RNG rnd;
         //1, 2-4, 5-9 numbers are problems
@@ -143,7 +161,7 @@ public class Championship {
     void printLeader(int lap) {
         Driver drv;
         drv = drivers.get(0);
-        System.out.println("* Leader in the lap number " + (lap+1) + " is " + drv.getName() + ".");
+        System.out.println("* Leader in the lap number " + (lap + 1) + " is " + drv.getName() + ".");
     }
 
     void printWinnersAfterRace(String venueName) {
@@ -202,9 +220,9 @@ public class Championship {
             drv.setRanking(5);
         }
 
-        System.out.println("Sorted drivers:");
+        System.out.println("Drivers sorted by accumulated time:");
         for (Driver driver : drivers) {
-            System.out.println("Driver " + driver.getName() + ", "
+            System.out.println("- Driver " + driver.getName() + ", "
                     + driver.getAccumulatedTime() + " seconds.");
         }
     }
@@ -215,9 +233,9 @@ public class Championship {
         }
         Collections.sort(drivers);
         Collections.reverse(drivers);
-        System.out.println("Sorted drivers:");
+        System.out.println("Drivers sorted by accumulated points:");
         for (Driver driver : drivers) {
-            System.out.println("Driver " + driver.getName() + ", "
+            System.out.println("- Driver " + driver.getName() + ", "
                     + driver.getAccumulatedPoints() + " points.");
         }
     }
@@ -246,6 +264,8 @@ public class Championship {
             for (Driver driver : drivers) {
                 if (!driver.isWetWeatherPneumatics()) {
                     driver.setAccumulatedTime(driver.getAccumulatedTime() + 5);
+                    System.out.println("Driver " + driver.getName() + "did not use pneumatics"
+                            + " for wet weather, so he had an extra 5 seconds on this lap.");
                 }
             }
         }
