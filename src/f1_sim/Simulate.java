@@ -64,9 +64,6 @@ public class Simulate {
 
         int chosenRace = 0;
         int[] races = new int[numRaces]; //array of chosen races, example: 2 5 3 are chosen
-        for (int i = 0; i < numRaces; i++) {
-
-        }
 
         System.out.println();
         System.out.println("---------------------------------------");
@@ -103,7 +100,7 @@ public class Simulate {
             System.out.println("* RACE NUMBER " + (i + 1) + " IS STARTING *");
             System.out.println("---------------------------------------");
 
-            for (int j = 0; j < chmp.getNumberOfLaps(i); j++) {
+            for (int j = 0; j < chmp.getNumberOfLaps(races[i]); j++) {
                 System.out.println("Drivers are ready to start lap number " + (j + 1)
                         + " on vanue " + chmp.getVenuesName(races[i]) + ".");
                 if (j == 1) {
