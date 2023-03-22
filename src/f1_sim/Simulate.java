@@ -122,7 +122,8 @@ public class Simulate {
                 System.out.println("Press enter to continue.");
                 readString = sc.nextLine();
             }
-
+            chmp.updateAccumulatedPoints();
+            
             chmp.printWinnersAfterRace(chmp.getVenuesName(races[i]));
             System.out.println("---------------------------------------");
             System.out.println();

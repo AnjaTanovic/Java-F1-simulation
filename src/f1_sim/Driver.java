@@ -89,13 +89,12 @@ public class Driver implements Comparable<Driver>{
     public void setWetWeatherPneumatics(boolean wetWeatherPneumatics) {
         this.wetWeatherPneumatics = wetWeatherPneumatics;
     }
-    
-    public void useSpecialSkill(RNG rng) {
-        
-    }
 
     @Override
     public int compareTo(Driver o) {
+        //-1 before, 0 the same, 1 after
+        if (o == null)
+            return 1;
         int greater = 0;
         if (this.accumulatedTime > o.getAccumulatedTime())
             greater = 1;

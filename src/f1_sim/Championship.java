@@ -32,6 +32,10 @@ public class Championship {
         BufferedReader drivers_in = new BufferedReader(new FileReader(drivers_txt));
         while ((readString = drivers_in.readLine()) != null) {
             String[] name_rank_skill = readString.split(",");
+            if (name_rank_skill.length != 3) {
+                System.out.println("Text document for driver data is not in correct form!");
+                System.exit(0);
+            }
             Driver drv = new Driver(name_rank_skill[0], Integer.parseInt(name_rank_skill[1]), name_rank_skill[2]);
             drivers.add(drv);
         }
@@ -39,6 +43,10 @@ public class Championship {
         BufferedReader venues_in = new BufferedReader(new FileReader(venues_txt));
         while ((readString = venues_in.readLine()) != null) {
             String[] name_laps_time_rain = readString.split(",");
+            if (name_laps_time_rain.length != 4) {
+                System.out.println("Text document for vanue data is not in correct form!");
+                System.exit(0);
+            }
             Venue vn = new Venue(name_laps_time_rain[0], Integer.parseInt(name_laps_time_rain[1]),
                     Integer.parseInt(name_laps_time_rain[2]), Double.parseDouble(name_laps_time_rain[3]));
             venues.add(vn);
@@ -74,7 +82,7 @@ public class Championship {
             drv = drivers.get(i);
             drv.setEligibleToRace(true);
             drv.setWetWeatherPneumatics(false);
-            
+
             if (drv.getRanking() == 1) {
                 drv.setAccumulatedTime(0);
             } else if (drv.getRanking() == 2) {
@@ -145,6 +153,7 @@ public class Championship {
                     System.out.println("Driver " + drv.getName() + " has unrecoverable "
                             + "mechanical fault. He will no longer compete in this race.");
                     drv.setEligibleToRace(false);
+                    drv.setAccumulatedTime(1000);
                 } else if ((problemProbability > UNRECOVERABLE_MECHANICAL_FAULT)
                         && (problemProbability <= (UNRECOVERABLE_MECHANICAL_FAULT + MAJOR_MECHANICAL_FAULT))) {
                     System.out.println("Driver " + drv.getName() + " had major mechanical fault.");
@@ -200,6 +209,28 @@ public class Championship {
     void sortDriversByTime() {
         Collections.sort(drivers);
 
+        System.out.println("Drivers sorted by accumulated time:");
+        for (Driver driver : drivers) {
+            System.out.println("- Driver " + driver.getName() + ", "
+                    + driver.getAccumulatedTime() + " seconds, "
+                    + driver.getAccumulatedPoints() + " points.");
+        }
+    }
+
+    void sortDriversByPoints() {
+        for (Driver driver : drivers) {
+            driver.setAccumulatedTime(driver.getAccumulatedPoints());
+        }
+        Collections.sort(drivers);
+        Collections.reverse(drivers);
+        System.out.println("Drivers sorted by accumulated points:");
+        for (Driver driver : drivers) {
+            System.out.println("- Driver " + driver.getName() + ", "
+                    + driver.getAccumulatedPoints() + " points.");
+        }
+    }
+
+    void updateAccumulatedPoints() {
         Driver drv;
         for (int i = 0; i < 4; i++) {
             drv = drivers.get(i);
@@ -218,25 +249,6 @@ public class Championship {
         for (int i = 4; i < drivers.size(); i++) {
             drv = drivers.get(i);
             drv.setRanking(5);
-        }
-
-        System.out.println("Drivers sorted by accumulated time:");
-        for (Driver driver : drivers) {
-            System.out.println("- Driver " + driver.getName() + ", "
-                    + driver.getAccumulatedTime() + " seconds.");
-        }
-    }
-
-    void sortDriversByPoints() {
-        for (Driver driver : drivers) {
-            driver.setAccumulatedTime(driver.getAccumulatedPoints());
-        }
-        Collections.sort(drivers);
-        Collections.reverse(drivers);
-        System.out.println("Drivers sorted by accumulated points:");
-        for (Driver driver : drivers) {
-            System.out.println("- Driver " + driver.getName() + ", "
-                    + driver.getAccumulatedPoints() + " points.");
         }
     }
 
